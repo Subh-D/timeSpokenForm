@@ -1,6 +1,6 @@
 package com.smartBear.britishTime;
 
-public class BritishTimeConvertor {
+public class BritishTimeConverter {
 
     private static final String[] TENS = {
         "", "", "twenty", "thirty", "forty", "fifty"
