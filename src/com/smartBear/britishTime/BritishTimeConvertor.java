@@ -2,6 +2,17 @@ package com.smartBear.britishTime;
 
 public class BritishTimeConvertor {
 
+    private static final String[] TENS = {
+        "", "", "twenty", "thirty", "forty", "fifty"
+    };
+
+    private static final String[] ONES = {
+        "", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+        "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+        "sixteen", "seventeen", "eighteen", "nineteen"
+    };
+
+
     public String convert(Time time){
         int hour = time.Hour();
         int minute = time.Minute();
@@ -16,6 +27,10 @@ public class BritishTimeConvertor {
 
         if (minute == 0) {
             return hourWord(hour) + " o'clock";
+        }
+
+        if (minute == 15) {
+            return "quarter past " + hourWord(hour);
         }
 
         if (minute >= 1 && minute <= 29) {
@@ -41,97 +56,30 @@ public class BritishTimeConvertor {
     }
 
     private String hourWord(int hour) {
-        return switch (hour) {
-            case 0 -> "twelve";
-            case 1 -> "one";
-            case 2 -> "two";
-            case 3 -> "three";
-            case 4 -> "four";
-            case 5 -> "five";
-            case 6 -> "six";
-            case 7 -> "seven";
-            case 8 -> "eight";
-            case 9 -> "nine";
-            case 10 -> "ten";
-            case 11 -> "eleven";
-            case 12 -> "twelve";
-            case 13 -> "one";
-            case 14 -> "two";
-            case 15 -> "three";
-            case 16 -> "four";
-            case 17 -> "five";
-            case 18 -> "six";
-            case 19 -> "seven";
-            case 20 -> "eight";
-            case 21 -> "nine";
-            case 22 -> "ten";
-            case 23 -> "eleven";
-            default -> throw new IllegalArgumentException("Invalid hour: " + hour);
-        };
+        if(hour < 0 || hour > 23){
+            throw new InvalidTimeException("Invalid hour: " + hour);
+        }
+
+        int twelveHour = hour % 12;
+        if(twelveHour == 0) twelveHour = 12;
+        return ONES[twelveHour];
     }
 
     private String minuteWord(int minute) {
-        return switch (minute) {
-            case 1 -> "one";
-            case 2 -> "two";
-            case 3 -> "three";
-            case 4 -> "four";
-            case 5 -> "five";
-            case 6 -> "six";
-            case 7 -> "seven";
-            case 8 -> "eight";
-            case 9 -> "nine";
-            case 10 -> "ten";
-            case 11 -> "eleven";
-            case 12 -> "twelve";
-            case 13 -> "thirteen";
-            case 14 -> "fourteen";
-            case 15 -> "quarter";
-            case 16 -> "sixteen";
-            case 17 -> "seventeen";
-            case 18 -> "eighteen";
-            case 19 -> "nineteen";
-            case 20 -> "twenty";
-            case 21 -> "twenty-one";
-            case 22 -> "twenty-two";
-            case 23 -> "twenty-three";
-            case 24 -> "twenty-four";
-            case 25 -> "twenty-five";
-            case 26 -> "twenty-six";
-            case 27 -> "twenty-seven";
-            case 28 -> "twenty-eight";
-            case 29 -> "twenty-nine";
-            case 30 -> "thirty";
-            case 31 -> "thirty-one";
-            case 32 -> "thirty-two";
-            case 33 -> "thirty-three";
-            case 34 -> "thirty-four";
-            case 35 -> "thirty-five";
-            case 36 -> "thirty-six";
-            case 37 -> "thirty-seven";
-            case 38 -> "thirty-eight";
-            case 39 -> "thirty-nine";
-            case 40 -> "forty";
-            case 41 -> "forty-one";
-            case 42 -> "forty-two";
-            case 43 -> "forty-three";
-            case 44 -> "forty-four";
-            case 45 -> "forty-five";
-            case 46 -> "forty-six";
-            case 47 -> "forty-seven";
-            case 48 -> "forty-eight";
-            case 49 -> "forty-nine";
-            case 50 -> "fifty";
-            case 51 -> "fifty-one";
-            case 52 -> "fifty-two";
-            case 53 -> "fifty-three";
-            case 54 -> "fifty-four";
-            case 55 -> "fifty-five";
-            case 56 -> "fifty-six";
-            case 57 -> "fifty-seven";
-            case 58 -> "fifty-eight";
-            case 59 -> "fifty-nine";
-            default -> throw new IllegalArgumentException("Invalid minute: " + minute);
-        };
+        if(minute < 0 || minute > 59){
+            throw new InvalidTimeException("Invalid minute: " + minute);
+        }
+
+        if(minute < 20){
+            return ONES[minute];
+        }
+        int tens = minute/10;
+        int ones = minute%10;
+
+        if(ones == 0){
+            return TENS[tens];
+        } else {
+            return TENS[tens] +"-"+ ONES[ones];
+        }
     }
 }
