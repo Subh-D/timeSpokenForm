@@ -2,8 +2,6 @@
 
 A Java CLI application that converts a time provided in `HH:MM` format into its British spoken form.
 
-The project was created as a coding challenge and focuses on clean Java design, readability, testability, and well-defined handling of input and time-conversion rules.
-
 ## How to Run
 
 ### 1. Clone the repository
