@@ -82,4 +82,49 @@ class BritishTimeConverterTest {
                 converter.convert(new Time(11, 55))
         );
     }
+
+    @Test
+    void shouldHandleAfternoonHours() {
+        // 14:20 should be "twenty past two"
+        assertEquals(
+                "twenty past two",
+                converter.convert(new Time(14, 20)));
+    }
+
+    @Test
+    void shouldHandleRolloverToMidnight() {
+        assertEquals(
+                "five to twelve",
+                converter.convert(new Time(23, 55)));
+    }
+
+    @Test
+    void shouldHandleOneMinutePast() {
+        assertEquals(
+                "one past six",
+                converter.convert(new Time(6, 1)));
+    }
+
+    @Test
+    void shouldHandleOneMinuteTo() {
+        assertEquals(
+                "one to seven",
+                converter.convert(new Time(6, 59)));
+    }
+
+    @Test
+    void shouldThrowExceptionForInvalidHour() {
+        org.junit.jupiter.api.Assertions.assertThrows(
+                InvalidTimeException.class,
+                () -> converter.convert(new Time(24, 0))
+        );
+    }
+
+    @Test
+    void shouldThrowExceptionForInvalidMinute() {
+        org.junit.jupiter.api.Assertions.assertThrows(
+                InvalidTimeException.class,
+                () -> converter.convert(new Time(10, 60))
+        );
+    }
 }
